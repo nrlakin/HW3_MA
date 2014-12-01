@@ -33,7 +33,11 @@ class BagWords():
             words = self.clean_str(movie['summary']).split()
             uniques = set(words)
             for word in uniques:
-                self.inc_count(decade, word, words.count(word))
+                count = words.count(word)
+                try:
+                    decade[word][count] += 1
+                except KeyError:
+                    decade[word][count] = 1
                 decade[word][0] -= 1
 
         # convert wordcounts into probabilities
