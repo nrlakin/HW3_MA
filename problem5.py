@@ -2,9 +2,9 @@ __auth__ = 'jhh283'
 
 # from matplotlib import pyplot as plt
 import numpy as np
-from balanced_set import balanced_set
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.random_projection import GaussianRandomProjection
+from helpers import BuildXY
+from sklearn.feature_extraction.text import CountVectorizer, HashingVectorizer
+from sklearn.random_projection import GaussianRandomProjection, SparseRandomProjection
 from sklearn.preprocessing import StandardScaler
 from sklearn import linear_model, svm, neighbors, qda
 from sklearn.pipeline import Pipeline
@@ -30,7 +30,8 @@ def getPredictionAcc(classifier, components, tr_x, tr_y, te_x, te_y):
     # clf = Pipeline([('vect', CountVectorizer(stop_words='english', encoding='latin-1')),
     clf = Pipeline([('vect', CountVectorizer(encoding='latin-1')),
                     # 5a - this strongly affects the quality of the result ...
-                    ('GRP', GaussianRandomProjection(n_components=components)),
+                    # ('GRP', GaussianRandomProjection(n_components=components)),
+                    ('GRP', SparseRandomProjection(n_components=components, dense_output=True)),
                     # 5b
                     ('Scaler', StandardScaler()),
                     # 5c
@@ -44,18 +45,9 @@ if __name__ == '__main__':
     classifier = raw_input('Enter Desired Classifier: ')
     components = input('Enter Number of Components: ')
 
-    listBal = list(balanced_set('balanced.txt'))
-    # need a less ghetto way of separating test/training
-    tr_y, tr_x, te_y, te_x = [], [], [], []
-    count = 0
-    for movie in listBal:
-        if (count % 2):
-            te_y.append(movie['year'])
-            te_x.append(movie['summary'])
-        else:
-            tr_y.append(movie['year'])
-            tr_x.append(movie['summary'])
-        count += 1
-    accuracy = getPredictionAcc(classifier, components, tr_x, tr_y, te_x, te_y)
+    train = BuildXY('train.txt')
+    test = BuildXY('test.txt')
+
+    accuracy = getPredictionAcc(classifier, components, train[0], train[1], test[0], test[1])
     print "Components: ", components
     print classifier + ' Accuracy', accuracy
