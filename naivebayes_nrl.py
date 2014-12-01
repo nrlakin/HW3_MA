@@ -1,9 +1,10 @@
 import string
 from math import log
+from balanced_set import list_all_words
 
 class BagWords():
 
-    def __init__(self, dirichlet=0.00001, train_size=54000):
+    def __init__(self, dirichlet=0.00001, train_size=3000):
 
         try:
             all_words = [word.rstrip('\n') for word in open('all_words.txt','r')]
@@ -58,14 +59,14 @@ class BagWords():
             counts[word] = words.count(word)
         likelihoods = dict.fromkeys(self.decades.keys())
         for decade in likelihoods.keys():
-            likelihoods = self.sum_log_zeros[decade]
+            likelihoods[decade] = self.sum_log_zeros[decade]
             for word in uniques:
                 try:
-                    likelihoods += log(self.decades[decade][word][counts[word]])
+                    likelihoods[decade] += log(self.decades[decade][word][counts[word]])
                 except KeyError:
-                    likelihoods += log(self.dirichlet)
-                likelihoods -= self.decades[decade][word][0]
-        return likelihoods
+                    likelihoods[decade] += log(self.dirichlet)
+                likelihoods[decade] -= self.decades[decade][word][0]
+        return max(likelihoods.iterkeys(), key = (lambda decade: likelihoods[decade]))
 
 
     def inc_count(self, count_dict, word, freq):

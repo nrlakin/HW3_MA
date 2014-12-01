@@ -32,11 +32,6 @@ def pmf(years, bins, plot_title = 'title'):
     fig.suptitle(plot_title)
     fig.show()
 
-def split(balanced_set, special_cases = []):
-    test, train = [], []
-    for movie in balanced_set:
-
-
 if __name__ == '__main__':
     test_movies = [
         'Finding Nemo',
@@ -62,5 +57,4 @@ if __name__ == '__main__':
     print 'drawing 2f-2h (balanced)'
     all_pmfs(balanced, tests)
     balanced = balanced_set('balanced.txt')
-    test, train = split('balanced.txt', test_movies)
     input("enter to exit")
