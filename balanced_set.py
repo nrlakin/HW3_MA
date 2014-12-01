@@ -34,6 +34,7 @@ def split_balanced(infile, trainfile, testfile):
     for movie in movies:
         if counts[movie['year']] != 0:
             f = test
+            counts[movie['year']] -= 1
         else:
             f = train
 

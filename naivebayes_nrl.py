@@ -4,7 +4,7 @@ from balanced_set import list_all_words
 
 class BagWords():
 
-    def __init__(self, dirichlet=0.00001, train_size=54000):
+    def __init__(self, dirichlet=0.00001, train_size=3000):
 
         try:
             all_words = [word.rstrip('\n') for word in open('all_words.txt','r')]
