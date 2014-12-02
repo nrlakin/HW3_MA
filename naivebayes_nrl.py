@@ -2,7 +2,7 @@ import string
 from math import log
 from balanced_set import list_all_words
 
-class BagWords():
+class NaiveBayes():
 
     def __init__(self, dirichlet=0.00001, train_size=3000):
 
@@ -47,11 +47,18 @@ class BagWords():
                 for count, freq in counts.items():
                     counts[count] = float(freq)/self.train_size
 
+        # precalculate sum of log probabilities of 0-frequency for
+        # each word. Avoid summing over a ton of zeros when predicting.
         for decade in self.sum_log_zeros.keys():
             words = self.decades[decade]
+            for word in words:
+                # ugly, but catch words that never appear zero times now.
+                # probably never happens, maybe on 'the'.
+                if words[word][0] == 0:
+                    words[word][0] = self.dirichlet
             self.sum_log_zeros[decade] = sum(log(words[word][0]) for word in words)
 
-    def predict_movie(self, movie):
+    def log_likelihood_by_decade(self, movie):
         words = self.clean_str(movie['summary']).split()
         uniques = set(words)
         counts = {}
@@ -65,9 +72,12 @@ class BagWords():
                     likelihoods[decade] += log(self.decades[decade][word][counts[word]])
                 except KeyError:
                     likelihoods[decade] += log(self.dirichlet)
-                likelihoods[decade] -= self.decades[decade][word][0]
-        return max(likelihoods.iterkeys(), key = (lambda decade: likelihoods[decade]))
+                likelihoods[decade] -= log(self.decades[decade][word][0])
+        return likelihoods
 
+    def predict_decade(self, movie):
+        likelihoods = self.log_likelihood_by_decade(movie)
+        return max(likelihoods.iterkeys(), key = (lambda decade: likelihoods[decade]))
 
     def inc_count(self, count_dict, word, freq):
         """
@@ -84,8 +94,12 @@ class BagWords():
         except KeyError:
             count[freq] = 1
 
-    def clean_str(self, instr):
+    def clean_str(self, instr, punc_to_whitespace=False):
         """
         Helper to return string with punctuation and capital letters removed.
         """
+        if punc_to_whitespace:
+            table = string.maketrans(string.punctuation,
+                                    ' '*len(string.punctuation))
+            return instr.lower().translate(table)
         return instr.lower().translate(None, string.punctuation)

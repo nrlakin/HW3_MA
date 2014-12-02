@@ -28,7 +28,7 @@ def split_balanced(infile, trainfile, testfile):
     decades = [1930 + 10*i for i in range(0,9)]
     counts = {}
     for i in decades:
-        counts[i] = 3000
+        counts[i] = NUM_MOVIES_PER_DECADE/2
     train = open(trainfile, 'w')
     test = open(testfile, 'w')
     for movie in movies:
@@ -37,12 +37,14 @@ def split_balanced(infile, trainfile, testfile):
             counts[movie['year']] -= 1
         else:
             f = train
-
-        f.write('||'.join([movie['title'],
+        try:
+            f.write('||'.join([movie['title'],
                             str(movie['year']),
                                 movie['identifier'],
                                 movie['episode'],
                                 ' '.join(movie['summary'].split())]))
+        except:
+            print movie
         f.write('\n')
 
 def gen_balanced_set(infile, outfile):
@@ -83,7 +85,14 @@ def list_all_words(filename, outfile):
         for word in all_words:
             f.write(word + '\n')
 
-def clean_str(instr):
+def clean_str(instr, punc_to_whitespace=False):
+    """
+    Helper to return string with punctuation and capital letters removed.
+    """
+    if punc_to_whitespace:
+        table = string.maketrans(string.punctuation,
+                                ' '*len(string.punctuation))
+        return instr.lower().translate(table)
     return instr.lower().translate(None, string.punctuation)
 
 if __name__=='__main__':
