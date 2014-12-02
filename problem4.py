@@ -7,8 +7,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import GaussianNB, MultinomialNB, BernoulliNB
 
-# http://stats.stackexchange.com/questions/33185/difference-between-naive-bayes-multinomial-naive-bayes
-
 if __name__ == '__main__':
     # need a less ghetto way of separating test/training
     train = BuildXY('train.txt')

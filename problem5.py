@@ -49,5 +49,4 @@ if __name__ == '__main__':
     test = BuildXY('test.txt')
 
     accuracy = getPredictionAcc(classifier, components, train[0], train[1], test[0], test[1])
-    print "Components: ", components
     print classifier + ' Accuracy', accuracy
