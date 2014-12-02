@@ -9,7 +9,7 @@ def get_informative_words(nb_model):
     for i, dec in enumerate(DECADES):
         for j, word in enumerate(words):
             freq_not_zero[i,j] = 1.0 - nb_model.decades[dec][word][0]
-    
+
 if __name__ == '__main__':
     print "Loading training set file..."
     try:

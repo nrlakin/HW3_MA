@@ -7,6 +7,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import GaussianNB, MultinomialNB, BernoulliNB
 
+
+# runs countvectorizer and multinomialnb on the pregenerated training and test sets
+# test/train should be generated using split_balanced in balanced_set.py
 if __name__ == '__main__':
     # need a less ghetto way of separating test/training
     train = BuildXY('train.txt')

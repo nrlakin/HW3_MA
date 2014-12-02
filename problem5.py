@@ -1,6 +1,6 @@
 __auth__ = 'jhh283'
 
-# from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 import numpy as np
 from helpers import BuildXY
 from sklearn.feature_extraction.text import CountVectorizer, HashingVectorizer
@@ -42,8 +42,12 @@ def getPredictionAcc(classifier, components, tr_x, tr_y, te_x, te_y):
 
 
 if __name__ == '__main__':
-    classifier = raw_input('Enter Desired Classifier: ')
-    components = input('Enter Number of Components: ')
+    """
+    The implementation of 5 uses a command line interface, to facilitate the the retrieval of accuracies
+    based on the selected classifier. To run, execute this file or run "python problem5.py" from the command line
+    """
+    classifier = raw_input('Enter Classifier (Options: SGD, Linear-SVC, SVC-rbf, Perceptron-L1, Perceptron-L2, kNN, QDA): ')
+    components = input('Enter Number of Components (Dimensionality): ')
 
     train = BuildXY('train.txt')
     test = BuildXY('test.txt')
