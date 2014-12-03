@@ -4,19 +4,6 @@ from matplotlib import pyplot as plt
 import balanced_set
 from constants import *
 
-def test_model(model, test_file):
-    correct = 0
-    total = 0
-    movies = balanced_set.balanced_set(test_file)
-    for m in movies:
-        year = m['year']
-        predicted = model.predict(year)
-        if year == predicted:
-            correct += 1
-        total += 1
-    print 'Got ' + str(correct) + ' out of ' + str(total)
-    print 'Accuracy: ' + str(float(correct)/total)
-
 def gen_counts_confusion(results):
     counts = np.array([0] * len(DECADES),dtype=np.float)
     confusion = np.zeros((len(DECADES),len(DECADES)))
@@ -44,7 +31,6 @@ def display_confusion_matrix(confusion):
     for row in confusion:
         print row
 
-
 if __name__ == '__main__':
     print "Loading training set file..."
     try:
@@ -61,7 +47,8 @@ if __name__ == '__main__':
     model.fit(training_set)
     results = []
     correct = 0
-    test_movies = balanced_set.balanced_set('test.txt')
+    #test_movies = balanced_set.balanced_set('test.txt')
+    test_movies = balanced_set.balanced_set('important_movies.txt')
     print 'Making predictions...'
     for movie in test_movies:
         log_likelihoods = model.log_likelihood_by_decade(movie)
