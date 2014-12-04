@@ -30,7 +30,6 @@ def get_informative_words(nb_model):
     for i, dec in enumerate(DECADES):
         for j, word in enumerate(words):
             freq_not_zero[i,j] = 1.0 - nb_model.decades[dec][word][0]
-
     scores = np.where(freq_not_zero!=0, freq_not_zero, nb_model.dirichlet)
     scores /= np.min(scores, axis = 0)
     best_words = {}
@@ -38,7 +37,6 @@ def get_informative_words(nb_model):
         indices = np.argsort(scores[i,:])[-100:]
         best_words[dec] = [words[index] for index in list(indices)]
     return best_words
-
 
 if __name__ == '__main__':
     print "Loading training set file..."
